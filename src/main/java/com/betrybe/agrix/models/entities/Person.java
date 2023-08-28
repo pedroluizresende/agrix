@@ -29,6 +29,16 @@ public class Person {
   public Person() {
   }
 
+  /**
+   * Método construtor da classe Person.
+   */
+  public Person(Long id, String username, String password, Role role) {
+    this.id = id;
+    this.username = username;
+    this.password = password;
+    this.role = role;
+  }
+
   public Long getId() {
     return id;
   }
