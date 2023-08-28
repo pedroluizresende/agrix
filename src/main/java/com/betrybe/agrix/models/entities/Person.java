@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @Entity
 @Table(name = "persons")
-public class Person implements UserDetails {
+public class Person implements UserDetails, GrantedAuthority {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,7 +78,7 @@ public class Person implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of();
+    return List.of(this);
   }
 
   @Override
@@ -109,5 +109,10 @@ public class Person implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  @Override
+  public String getAuthority() {
+    return this.getRole().getName();
   }
 }

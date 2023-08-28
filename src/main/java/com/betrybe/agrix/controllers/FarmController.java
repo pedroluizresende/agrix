@@ -4,11 +4,14 @@ import com.betrybe.agrix.controllers.dto.CropDto;
 import com.betrybe.agrix.controllers.dto.FarmDto;
 import com.betrybe.agrix.models.entities.Crop;
 import com.betrybe.agrix.models.entities.Farm;
+import com.betrybe.agrix.models.entities.Person;
 import com.betrybe.agrix.services.FarmService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +52,10 @@ public class FarmController {
    * @return retorna JSON com um array de Fazendas
    */
   @GetMapping()
-  public ResponseEntity<List<FarmDto>> getAllFarms() {
+  @Secured({"USER", "MANAGER", "ADMIN"})
+  public ResponseEntity<List<FarmDto>> getAllFarms(
+      @AuthenticationPrincipal Person person
+  ) {
     List<Farm> farms = farmService.getAllFarms();
     List<FarmDto> farmDtoList = farms.stream()
         .map(farm -> new FarmDto(farm.getId(), farm.getName(), farm.getSize())).toList();

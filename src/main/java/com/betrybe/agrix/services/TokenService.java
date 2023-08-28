@@ -33,6 +33,21 @@ public class TokenService {
         .sign(algorithm);
   }
 
+  /**
+   * Método responsável por validar um token.
+   *
+   * @param token token recebido pela requisição.
+   * @return retorna username do usuário
+   */
+  public String validateToken(String token) {
+    Algorithm algorithm = Algorithm.HMAC256(secret);
+    return JWT.require(algorithm)
+        .withIssuer("agrixdb")
+        .build()
+        .verify(token)
+        .getSubject();
+  }
+
   private Instant generateExpirationDate() {
     return LocalDateTime.now()
         .plusHours(2)
