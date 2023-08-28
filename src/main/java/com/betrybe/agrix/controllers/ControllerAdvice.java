@@ -1,6 +1,7 @@
 package com.betrybe.agrix.controllers;
 
 import com.betrybe.agrix.controllers.dto.ErrorDto;
+import com.betrybe.agrix.exceptions.BadRequestException;
 import com.betrybe.agrix.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,5 +22,11 @@ public class ControllerAdvice {
     ErrorDto errorDto = new ErrorDto(e.getMessage());
 
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDto);
+  }
+
+  @ExceptionHandler({BadRequestException.class})
+  public ResponseEntity<ErrorDto> handleBadRequestExcepetion(BadRequestException e) {
+    ErrorDto errorDto = new ErrorDto(e.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
   }
 }
