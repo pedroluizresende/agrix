@@ -1,0 +1,23 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  info:
+    env:
+      enabled: true
+
+info:
+  application:
+    name: agrix
+    description: Api para gerenciamento de fazendas.
+    author: Pedro Resende
+    version: '@project.version@'
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:s3cr3}
