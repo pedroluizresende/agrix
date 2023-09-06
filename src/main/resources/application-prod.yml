@@ -7,4 +7,4 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true# you won't do this in prod, I'm just doing this for demo purposes
+    show-sql: true
