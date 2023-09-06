@@ -1,16 +1,24 @@
-FROM eclipse-temurin:17-jdk-jammy as build-image
+# Estágio 1: Construir a aplicação Java com Maven
+FROM maven:3.8.4-openjdk-11 AS build
 WORKDIR /app
 
-COPY .mvn/ .mvn
-COPY ./src/main/ ./src/main/
-COPY mvnw pom.xml ./
+# Copie apenas o arquivo pom.xml para evitar reinstalar dependências quando o código não mudou
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-RUN ./mvnw clean package
+# Copie todo o código-fonte e compile o aplicativo
+COPY src src
+RUN mvn package
 
+# Estágio 2: Executar a aplicação Spring Boot
+FROM adoptopenjdk/openjdk11:alpine-jre
+WORKDIR /app
 
-FROM eclipse-temurin:17-jre-jammy
+# Copie o artefato JAR gerado do estágio de compilação
+COPY --from=build /app/target/nome-do-seu-arquivo-jar.jar app.jar
 
-COPY --from=build-image /app/target/*.jar /app/app.jar
-
+# Expõe a porta na qual a aplicação Spring Boot será executada
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# Comando para executar a aplicação Spring Boot
+CMD ["java", "-jar", "app.jar"]
